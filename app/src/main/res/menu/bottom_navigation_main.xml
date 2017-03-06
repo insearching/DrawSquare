@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_pick_fill_color"
+        android:title="@string/fill_color"
+        android:icon="@drawable/ic_action_line" />
+
+    <item android:id="@+id/action_pick_stroke_color"
+        android:title="@string/stroke_color"
+        android:icon="@drawable/ic_action_pencil" />
+
+    <item android:id="@+id/action_pick_shapes"
+        android:title="@string/shapes"
+        android:icon="@drawable/ic_action_circle" />
+</menu>
