@@ -5,4 +5,7 @@
     <string name="stroke_color">Stroke color</string>
     <string name="shapes">Shapes</string>
     <string name="stroke_width">Stroke width</string>
+    <string name="save">Save</string>
+    <string name="open">Open</string>
+    <string name="undo">Undo</string>
 </resources>

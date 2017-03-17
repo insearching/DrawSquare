@@ -1,5 +1,6 @@
 package com.example.serhiihrabas.drawsquare.model;
 
+import android.graphics.Canvas;
 import android.graphics.Paint;
 
 /**
@@ -39,6 +40,12 @@ public class Circle extends Shape {
     @Override
     public float getInitY() {
         return initY;
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawCircle(getInitX(), getInitY(), getRadius(), getFillPaint());
+        canvas.drawCircle(getInitX(), getInitY(), getRadius(), getStrokePaint());
     }
 
     public float getRadius(){

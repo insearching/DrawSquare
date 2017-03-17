@@ -33,4 +33,5 @@ dependencies {
     compile 'com.ogaclejapan.arclayout:library:1.1.0@aar'
     compile 'info.hoang8f:fbutton:1.0.5'
     compile 'org.adw.library:discrete-seekbar:1.0.1'
+    compile 'com.github.rustamg:file-dialogs:0.1.4'
 }

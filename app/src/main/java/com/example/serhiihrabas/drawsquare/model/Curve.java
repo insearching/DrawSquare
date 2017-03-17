@@ -1,5 +1,6 @@
 package com.example.serhiihrabas.drawsquare.model;
 
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
@@ -38,6 +39,11 @@ public class Curve extends Shape {
     @Override
     public float getInitY() {
         return 0;
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawPath(getPath(), getStrokePaint());
     }
 
     public Path getPath() {

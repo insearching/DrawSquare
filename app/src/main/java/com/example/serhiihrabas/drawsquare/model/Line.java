@@ -1,5 +1,6 @@
 package com.example.serhiihrabas.drawsquare.model;
 
+import android.graphics.Canvas;
 import android.graphics.Paint;
 
 /**
@@ -43,6 +44,12 @@ public class Line extends Shape {
         return initY;
     }
 
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawLine(getInitX(), getInitY(), getEndX(), getEndY(), getFillPaint());
+        canvas.drawLine(getInitX(), getInitY(), getEndX(), getEndY(), getStrokePaint());
+    }
+
     public float getEndX(){
         return endX;
     }
@@ -50,4 +57,6 @@ public class Line extends Shape {
     public float getEndY(){
         return endY;
     }
+
+
 }

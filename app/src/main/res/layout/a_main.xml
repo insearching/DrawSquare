@@ -13,6 +13,107 @@
         android:layout_height="match_parent" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/main_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_menu"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="normal" />
+
+    <FrameLayout
+        android:id="@+id/main_menu_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="invisible">
+
+        <com.ogaclejapan.arclayout.ArcLayout
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:arc_axisRadius="170dp"
+            app:arc_color="#26000000"
+            app:arc_freeAngle="false"
+            app:arc_origin="top|left"
+            app:arc_radius="200dp"
+            app:arc_reverseAngle="false">
+
+            <info.hoang8f.widget.FButton
+                android:id="@+id/new_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#03A9F4"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/save"
+                android:textColor="#FFFFFF"
+                app:arc_origin="center"
+                app:buttonColor="@android:color/holo_red_light"
+                app:cornerRadius="5dp"
+                app:shadowColor="@android:color/holo_red_dark"
+                app:shadowEnabled="true"
+                app:shadowHeight="5dp"/>
+
+
+            <info.hoang8f.widget.FButton
+                android:id="@+id/save_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#03A9F4"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/save"
+                android:textColor="#FFFFFF"
+                app:arc_origin="center"
+                app:buttonColor="@android:color/holo_orange_light"
+                app:cornerRadius="5dp"
+                app:shadowColor="@android:color/holo_orange_dark"
+                app:shadowEnabled="true"
+                app:shadowHeight="5dp"/>
+
+            <info.hoang8f.widget.FButton
+                android:id="@+id/load_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#00BCD4"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/open"
+                android:textColor="#FFFFFF"
+                app:arc_origin="center"
+                app:buttonColor="@android:color/holo_green_light"
+                app:cornerRadius="5dp"
+                app:shadowColor="@android:color/holo_green_dark"
+                app:shadowEnabled="true"
+                app:shadowHeight="5dp"/>
+
+            <info.hoang8f.widget.FButton
+                android:id="@+id/undo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#009688"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/undo"
+                android:textColor="#FFFFFF"
+                app:arc_origin="center"
+                app:buttonColor="@android:color/holo_blue_light"
+                app:cornerRadius="5dp"
+                app:shadowColor="@android:color/holo_blue_dark"
+                app:shadowEnabled="true"
+                app:shadowHeight="5dp"/>
+
+        </com.ogaclejapan.arclayout.ArcLayout>
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/instrument_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -131,7 +232,6 @@
                 android:background="#03A9F4"
                 android:gravity="center"
                 android:padding="10dp"
-                android:src="@drawable/ic_action_line"
                 android:text="@string/fill_color"
                 android:textColor="#FFFFFF"
                 app:arc_origin="center"
@@ -149,7 +249,6 @@
                 android:background="#00BCD4"
                 android:gravity="center"
                 android:padding="10dp"
-                android:src="@drawable/ic_action_pencil"
                 android:text="@string/stroke_color"
                 android:textColor="#FFFFFF"
                 app:arc_origin="center"
@@ -178,4 +277,5 @@
 
         </com.ogaclejapan.arclayout.ArcLayout>
     </FrameLayout>
+
 </RelativeLayout>

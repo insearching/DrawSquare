@@ -1,5 +1,6 @@
 package com.example.serhiihrabas.drawsquare.model;
 
+import android.graphics.Canvas;
 import android.graphics.Paint;
 
 /**
@@ -11,4 +12,6 @@ public abstract class Shape {
     public abstract Paint getStrokePaint();
     public abstract float getInitX();
     public abstract float getInitY();
+
+    public abstract void draw(Canvas canvas);
 }

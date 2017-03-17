@@ -1,5 +1,6 @@
 package com.example.serhiihrabas.drawsquare.model;
 
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -42,6 +43,12 @@ public class Rectangle extends Shape {
     @Override
     public float getInitY() {
         return initY;
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawRect(getRect(), getFillPaint());
+        canvas.drawRect(getRect(), getStrokePaint());
     }
 
     public Rect getRect(){
