@@ -146,11 +146,7 @@ public class MainActivity extends AppCompatActivity implements ColorPickerDialog
         }
 
         AnimatorSet animSet = new AnimatorSet();
-<<<<<<< Updated upstream
-        animSet.setDuration(500);
-=======
         animSet.setDuration(300);
->>>>>>> Stashed changes
         animSet.setInterpolator(new OvershootInterpolator());
         animSet.playTogether(animList);
         animSet.start();
