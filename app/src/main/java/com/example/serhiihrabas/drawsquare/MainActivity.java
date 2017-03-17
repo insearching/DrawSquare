@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements ColorPickerDialog
         }
 
         AnimatorSet animSet = new AnimatorSet();
-        animSet.setDuration(400);
+        animSet.setDuration(500);
         animSet.setInterpolator(new OvershootInterpolator());
         animSet.playTogether(animList);
         animSet.start();
