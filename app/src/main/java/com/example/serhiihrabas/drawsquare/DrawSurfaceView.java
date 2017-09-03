@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.Action;
+import timber.log.Timber;
 
 
 /**
@@ -34,19 +35,30 @@ import io.reactivex.functions.Action;
 public class DrawSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String LOG_TAG = DrawSurfaceView.class.getSimpleName();
-    //    boolean saving = false;
+
     private Bitmap mBitmap;
+
     private DrawThread drawThread;
+
     private float initX, initY, radius, endX, endY;
+
     private Path path = new Path();
+
     private Paint fillPaint;
+
     private Paint strokePaint;
+
     private Paint bgPaint;
+
     private Instrument curInstrument;
+
     private volatile ArrayList<Shape> layers = new ArrayList<>();
+
     private Bitmap loadBitmap = null;
 
     private CanvasState curCanvasState;
+
+    private final static int OPERATION_DELAY = 500;
 
     public DrawSurfaceView(Context context) {
         super(context);
@@ -138,37 +150,38 @@ public class DrawSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                     radius = 1;
                     break;
                 case PENCIL:
+                    Timber.i(initX + " " + initY);
                     path.moveTo(initX, initY);
                     break;
             }
 
             curCanvasState = CanvasState.DRAWING;
-            Log.d(LOG_TAG, "ACTION_DOWN x=" + initX + " y=" + initY + " radius=" + radius);
+//            Log.d(LOG_TAG, "ACTION_DOWN x=" + initX + " y=" + initY + " radius=" + radius);
         } else if (action == MotionEvent.ACTION_UP) {
-            Observable.empty().delay(500, TimeUnit.MILLISECONDS)
-                    .doOnComplete(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            curCanvasState = CanvasState.IDLE;
-                            switch (curInstrument) {
-                                case CIRCLE:
-                                    layers.add(new Circle(initX, initY, radius, fillPaint, strokePaint));
-                                    break;
-                                case RECTANGLE:
-                                    layers.add(new Rectangle(initX, initY, endX, endY, fillPaint, strokePaint));
-                                    break;
-                                case LINE:
-                                    layers.add(new Line(initX, initY, endX, endY, fillPaint, strokePaint));
-                                    break;
-                                case PENCIL:
-                                    layers.add(new Curve(path, fillPaint, strokePaint));
-                                    path = new Path();
-                                    break;
-                            }
-
+//            Observable.empty().delay(OPERATION_DELAY, TimeUnit.MILLISECONDS)
+//                    .doOnComplete(() -> {
+                        curCanvasState = CanvasState.IDLE;
+                        switch (curInstrument) {
+                            case CIRCLE:
+                                layers.add(
+                                        new Circle(initX, initY, radius, fillPaint, strokePaint));
+                                break;
+                            case RECTANGLE:
+                                layers.add(new Rectangle(initX, initY, endX, endY, fillPaint,
+                                        strokePaint));
+                                break;
+                            case LINE:
+                                layers.add(
+                                        new Line(initX, initY, endX, endY, fillPaint, strokePaint));
+                                break;
+                            case PENCIL:
+                                layers.add(new Curve(path, fillPaint, strokePaint));
+                                path = new Path();
+                                Timber.i("Adding path");
+                                break;
                         }
-                    }).subscribe();
-            Log.d(LOG_TAG, "ACTION_UP radius=" + radius);
+
+//                    }).subscribe();
         }
 
         return true;
@@ -178,69 +191,76 @@ public class DrawSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (curCanvasState == CanvasState.INITIATING) {
-            canvas.drawRect(0, 0, getWidth(), getHeight(), bgPaint);
-        }
-        if (curCanvasState == CanvasState.DRAWING
-                || curCanvasState == CanvasState.SAVING) {
+        switch (curCanvasState) {
+            case INITIATING:
+                canvas.drawRect(0, 0, getWidth(), getHeight(), bgPaint);
+                break;
+            case DRAWING:
+            case SAVING:
+                if (initX <= 50 || initY <= 50) {
+                    return;
+                }
+                if (curCanvasState == CanvasState.SAVING) {
+                    canvas = new Canvas(mBitmap);
+                }
+                canvas.drawRect(0, 0, getWidth(), getHeight(), bgPaint);
 
-            if (curCanvasState == CanvasState.SAVING) {
-                canvas = new Canvas(mBitmap);
-            }
-            canvas.drawRect(0, 0, getWidth(), getHeight(), bgPaint);
+                if (loadBitmap != null) {
+                    canvas.drawBitmap(loadBitmap, 0, 0, null);
+                }
+                for (Shape shape : new ArrayList<>(layers)) {
+                    shape.draw(canvas);
+                }
 
-            if(loadBitmap != null){
-                canvas.drawBitmap(loadBitmap, 0, 0, null);
-            }
-            for (Shape shape : new ArrayList<>(layers)) {
-                shape.draw(canvas);
-            }
-
-            switch (curInstrument) {
-                case CIRCLE:
-                    canvas.drawCircle(initX, initY, radius, fillPaint);
-                    canvas.drawCircle(initX, initY, radius, strokePaint);
-                    break;
-                case RECTANGLE:
-                    canvas.drawRect(initX, initY, endX, endY, fillPaint);
-                    canvas.drawRect(initX, initY, endX, endY, strokePaint);
-                    break;
-                case LINE:
-                    canvas.drawLine(initX, initY, endX, endY, fillPaint);
-                    canvas.drawLine(initX, initY, endX, endY, strokePaint);
-                    break;
-                case PENCIL:
-                    canvas.drawPath(path, strokePaint);
-                    break;
-            }
+                switch (curInstrument) {
+                    case CIRCLE:
+                        canvas.drawCircle(initX, initY, radius, fillPaint);
+                        canvas.drawCircle(initX, initY, radius, strokePaint);
+                        break;
+                    case RECTANGLE:
+                        canvas.drawRect(initX, initY, endX, endY, fillPaint);
+                        canvas.drawRect(initX, initY, endX, endY, strokePaint);
+                        break;
+                    case LINE:
+                        canvas.drawLine(initX, initY, endX, endY, fillPaint);
+                        canvas.drawLine(initX, initY, endX, endY, strokePaint);
+                        break;
+                    case PENCIL:
+                        canvas.drawPath(path, strokePaint);
+                        break;
+                }
+                break;
+            case CLEARING:
+                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
+                break;
         }
     }
 
     public void postDrawingState(CanvasState state) {
         curCanvasState = state;
-        Observable.empty().delay(500, TimeUnit.MILLISECONDS)
-                .doOnComplete(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        curCanvasState = CanvasState.IDLE;
-                    }
-                }).subscribe();
+        Observable.empty().delay(OPERATION_DELAY, TimeUnit.MILLISECONDS)
+                .doOnComplete(() -> curCanvasState = CanvasState.IDLE).subscribe();
     }
 
     public void clearCanvas() {
-        postDrawingState(CanvasState.CLEARING);
+        postDrawingState(CanvasState.INITIATING);
     }
 
     public boolean saveToFile(String filePath) {
         postDrawingState(CanvasState.SAVING);
-        Log.d(LOG_TAG, "Saving file " + filePath + " width=" + this.getWidth() + " height=" + this.getHeight());
-        Bitmap bitmap = Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
+        Log.d(LOG_TAG,
+                "Saving file " + filePath + " width=" + this.getWidth() + " height=" + this
+                        .getHeight());
+        Bitmap bitmap =
+                Bitmap.createBitmap(this.getWidth(), this.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         this.draw(canvas);
 
         File file = new File(filePath);
-        if (file.exists())
+        if (file.exists()) {
             file.delete();
+        }
         try {
             FileOutputStream out = new FileOutputStream(file);
             mBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));

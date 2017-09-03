@@ -42,14 +42,14 @@
             app:arc_reverseAngle="false">
 
             <info.hoang8f.widget.FButton
-                android:id="@+id/new_fab"
+                android:id="@+id/clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="#03A9F4"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@string/save"
+                android:text="@string/clear"
                 android:textColor="#FFFFFF"
                 app:arc_origin="center"
                 app:buttonColor="@android:color/holo_red_light"
@@ -60,7 +60,7 @@
 
 
             <info.hoang8f.widget.FButton
-                android:id="@+id/save_fab"
+                android:id="@+id/save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -77,7 +77,7 @@
                 app:shadowHeight="5dp"/>
 
             <info.hoang8f.widget.FButton
-                android:id="@+id/load_fab"
+                android:id="@+id/load"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
